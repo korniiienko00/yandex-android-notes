@@ -41,6 +41,13 @@ android {
 
 dependencies {
 
+    // вью модель для mvvm
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // logback для логов репозитория
+    implementation("com.github.tony19:logback-android:3.0.0")
+    implementation ("org.slf4j:slf4j-api:2.0.17")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,4 +63,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // навигация андроид
+    implementation(libs.androidx.navigation.compose)
 }
