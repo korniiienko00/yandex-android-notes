@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NotesApp</string>
+    <string name="no_items">Заметки еще не созданы</string>
 </resources>

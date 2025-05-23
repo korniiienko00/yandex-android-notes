@@ -18,10 +18,10 @@ fun AppNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route) {
+    NavHost(navController = navController, startDestination = Screen.MainNotes.route) {
+        composable(route = Screen.MainNotes.route) {
             NotesScreen(
-                onClickAdd = {
+                onClickAddNote = {
                     navController.navigate(Screen.CreateNote.route)
                 },
                 onClickOpenNote = { noteId ->
