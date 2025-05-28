@@ -1,15 +1,12 @@
 package com.korniiienko.notesapp.di
 
-import android.net.http.NetworkException
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.korniiienko.data.remote.RemoteApiService
-import com.korniiienko.model.remote.NetworkError
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 class NetworkManager {
@@ -22,42 +19,23 @@ class NetworkManager {
             .callTimeout(60, TimeUnit.SECONDS)
 
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = HttpLoggingInterceptor.Level.HEADERS
             })
             .addInterceptor { chain ->
-                try {
-                    val originalRequest = chain.request()
-                    val requestBuilder = originalRequest.newBuilder()
-                        .addHeader("Authorization", "Bearer $AUTH_TOKEN")
-                        .addHeader("Accept", "application/json")
-                        .addHeader("Content-Type", "application/json")
+                val originalRequest = chain.request()
+                val requestBuilder = originalRequest.newBuilder()
+                    .addHeader("Authorization", "Bearer $AUTH_TOKEN")
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Content-Type", "application/json")
 
-                    originalRequest.header("X-Generate-Fails")?.let {
-                        requestBuilder.header("X-Generate-Fails", it)
-                    }
+                originalRequest.header("X-Generate-Fails")?.let {
+                    requestBuilder.header("X-Generate-Fails", it)
+                }
 
-                    chain.proceed(requestBuilder.build())
-                } catch (e: SocketTimeoutException) {
-                    throw NetworkError("Превышено время ожидания соединения", e)
-                } catch (e: Exception) {
-                    throw NetworkError("Сетевая ошибка", e)
-                }
+                chain.proceed(requestBuilder.build())
             }
-            .addNetworkInterceptor { chain ->
-                val response = chain.proceed(chain.request())
-                if (!response.isSuccessful) {
-                    throw when (response.code) {
-                        408 -> NetworkError("Таймаут запроса")
-                        500 -> NetworkError("Ошибка сервера")
-                        else -> NetworkError("HTTP ошибка: ${response.code}")
-                    }
-                }
-                response
-            }
-            .retryOnConnectionFailure(true) // Повторять при сбоях соединения
             .build()
     }
-
 
     private val json = Json {
         ignoreUnknownKeys = true
