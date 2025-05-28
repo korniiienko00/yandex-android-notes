@@ -5,12 +5,19 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.korniiienko.notesapp.ui.screens.MainViewModel
 import com.korniiienko.notesapp.ui.screens.add.AddNoteViewModel
 import com.korniiienko.notesapp.ui.screens.edit.EditNoteViewModel
 import com.korniiienko.notesapp.ui.screens.notes.NotesViewModel
 
 object ViewModelProvider {
     val Factory = viewModelFactory {
+
+        initializer {
+            MainViewModel(
+                themeRepository = notesApplication().container.themeRepository
+            )
+        }
 
         initializer {
             NotesViewModel(

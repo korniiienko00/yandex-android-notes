@@ -10,6 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.korniiienko.notesapp.model.AppTheme
 import com.korniiienko.notesapp.ui.screens.add.AddNoteScreen
 import com.korniiienko.notesapp.ui.screens.edit.EditNoteScreen
 import com.korniiienko.notesapp.ui.screens.notes.NotesScreen
@@ -18,6 +19,7 @@ import com.korniiienko.notesapp.ui.screens.notes.NotesScreen
 @Composable
 fun AppNavigation(
     navController: NavHostController,
+    appTheme: AppTheme,
     modifier: Modifier = Modifier
 ) {
     NavHost(navController = navController, startDestination = Screen.MainNotes.route) {
@@ -29,6 +31,7 @@ fun AppNavigation(
                 onClickOpenNote = { noteId ->
                     navController.navigate(Screen.EditNote.createRoute(noteId))
                 },
+                appTheme = appTheme,
                 modifier = Modifier
             )
         }

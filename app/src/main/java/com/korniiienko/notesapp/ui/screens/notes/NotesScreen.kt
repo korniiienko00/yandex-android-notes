@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.korniiienko.notesapp.R
 import com.korniiienko.notesapp.ViewModelProvider
+import com.korniiienko.notesapp.model.AppTheme
 import com.korniiienko.notesapp.model.Note
 import com.korniiienko.notesapp.navigation.Screen
 import com.korniiienko.notesapp.ui.shared.LoadingCircle
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
+    appTheme: AppTheme,
     onClickAddNote: () -> Unit,
     onClickOpenNote: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -60,6 +62,7 @@ fun NotesScreen(
         topBar = {
             TopAppBar(
                 name = Screen.MainNotes.name,
+                appTheme = appTheme,
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
             )

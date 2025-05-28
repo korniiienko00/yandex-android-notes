@@ -1,6 +1,7 @@
 package com.korniiienko.notesapp.data
 
 import android.content.Context
+import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.korniiienko.notesapp.model.Note
 import com.korniiienko.notesapp.repository.JsonLocalRepository
@@ -18,8 +19,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.io.File
 
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 class JsonLocalRepositoryTest {

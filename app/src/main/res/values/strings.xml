@@ -8,4 +8,5 @@
     <string name="set_name">Название</string>
     <string name="set_content">Описание</string>
     <string name="enable_self_destruct">Добавить самоуничтожение заметки</string>
+    <string name="switch_theme">Поменять тему</string>
 </resources>

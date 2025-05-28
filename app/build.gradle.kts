@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     // для тестов json
-    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("org.robolectric:robolectric:4.10.3")
     testImplementation("androidx.test:core:1.5.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     testImplementation("junit:junit:4.13.2")
