@@ -110,6 +110,7 @@ fun NotesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitContent(
     notes: List<Note>,

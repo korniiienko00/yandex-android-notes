@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">NotesApp</string>
     <string name="no_items">Заметки еще не созданы</string>
+    <string name="create">Создать</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="brightness">Brightness</string>
+    <string name="select_color">Выбор цвета</string>
+    <string name="set_name">Название</string>
+    <string name="set_content">Описание</string>
+    <string name="enable_self_destruct">Добавить самоуничтожение заметки</string>
 </resources>

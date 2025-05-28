@@ -10,6 +10,7 @@ data class Note(
     val content: String,
     val color: Int = Color.WHITE,
     val importance: Importance = Importance.BASIC,
+    val selfDestructDate:  Long? = null
 ){
     val json: JSONObject
         get() {
@@ -50,6 +51,13 @@ data class Note(
             Note(uid, title, content, color, importance)
         } catch (e: Exception) {
             null
+        }
+
+        fun create(title: String, content: String): Note {
+            return Note(
+                title = title,
+                content = content
+            )
         }
     }
 }

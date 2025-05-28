@@ -2,6 +2,7 @@ package com.korniiienko.notesapp.navigation
 
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,6 +14,7 @@ import com.korniiienko.notesapp.ui.screens.add.AddNoteScreen
 import com.korniiienko.notesapp.ui.screens.edit.EditNoteScreen
 import com.korniiienko.notesapp.ui.screens.notes.NotesScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(
     navController: NavHostController,
@@ -22,7 +24,7 @@ fun AppNavigation(
         composable(route = Screen.MainNotes.route) {
             NotesScreen(
                 onClickAddNote = {
-                    navController.navigate(Screen.CreateNote.route)
+                    navController.navigate(Screen.AddNote.route)
                 },
                 onClickOpenNote = { noteId ->
                     navController.navigate(Screen.EditNote.createRoute(noteId))
@@ -48,7 +50,7 @@ fun AppNavigation(
             )
         }
 
-        composable(route = Screen.CreateNote.route) {
+        composable(route = Screen.AddNote.route) {
             AddNoteScreen(
                 navigateBack = { navController.navigateUp() },
                 modifier = Modifier.fillMaxWidth()

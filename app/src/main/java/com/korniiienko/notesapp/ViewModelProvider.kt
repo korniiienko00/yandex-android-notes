@@ -5,7 +5,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.korniiienko.notesapp.ui.screens.add.NoteViewModel
+import com.korniiienko.notesapp.ui.screens.add.AddNoteViewModel
 import com.korniiienko.notesapp.ui.screens.edit.EditNoteViewModel
 import com.korniiienko.notesapp.ui.screens.notes.NotesViewModel
 
@@ -20,8 +20,9 @@ object ViewModelProvider {
         }
 
         initializer {
-            NoteViewModel(
+            AddNoteViewModel(
                 remoteRepository = notesApplication().container.remoteRepository,
+                localRepository = notesApplication().container.localRepository
             )
         }
 

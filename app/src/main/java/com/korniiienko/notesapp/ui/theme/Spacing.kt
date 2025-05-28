@@ -5,6 +5,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object Spacing {
+    val colorPicker: Dp @Composable get() = 160.dp
+    val indicator: Dp @Composable get() = 2.dp
+    val colorBox: Dp @Composable get() = 40.dp
+
     val small: Dp @Composable get() = 4.dp
     val medium: Dp @Composable get() = 14.dp
     val large: Dp @Composable get() = 24.dp

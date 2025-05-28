@@ -4,7 +4,7 @@ sealed class Screen(val route: String, val name: String) {
 
     object MainNotes : Screen("main_notes", "Мои заметки")
 
-    object CreateNote : Screen("create_note", "Новая заметка")
+    object AddNote : Screen("create_note", "Новая заметка")
 
     data class EditNote(val noteId: String) : Screen("edit_note/{noteId}", "Редактирование") {
         companion object {
