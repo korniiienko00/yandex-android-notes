@@ -11,7 +11,10 @@ import com.korniiienko.notesapp.model.NoteEntity
 import com.korniiienko.notesapp.model.toNote
 import com.korniiienko.notesapp.model.toUiState
 import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.ui.screens.add.NoteEntryState
+import com.korniiienko.notesapp.ui.screens.add.AddNoteIntent
+import com.korniiienko.notesapp.ui.screens.add.AddNoteState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -21,47 +24,71 @@ class EditNoteViewModel(
     savedStateHandle: SavedStateHandle,
     private val localRepository: LocalRepository
 ) : ViewModel() {
-    var entryUiState by mutableStateOf(NoteEntryState())
-        private set
+    private val _state = MutableStateFlow(EditNoteState())
+    val state: StateFlow<EditNoteState> = _state
 
-    fun loadNoteByUid(uid: String) {
+    fun processIntent(intent: EditNoteIntent) {
+        when (intent) {
+            is EditNoteIntent.LoadNote -> loadNote(intent.uid)
+            is EditNoteIntent.UpdateNoteEntity -> updateNoteState(intent.note)
+            EditNoteIntent.UpdateNote -> updateNote()
+            EditNoteIntent.DeleteNote -> deleteNote()
+            EditNoteIntent.ResetDeleteState -> resetDeleteState()
+        }
+    }
+
+    private fun loadNote(uid: String) {
         viewModelScope.launch {
-            entryUiState = localRepository.getNoteByUid(uid = uid)
+            _state.value = _state.value.copy(isLoading = true)
+            localRepository.getNoteByUid(uid = uid)
                 .filterNotNull()
-                .map {
-                    NoteEntryState(
-                        currentNote = it.toUiState(),
-                        isEntryValid = true
+                .map { note ->
+                    _state.value.copy(
+                        currentNote = note.toUiState(),
+                        isEntryValid = true,
+                        isLoading = false
                     )
                 }
                 .first()
+                .let { newState ->
+                    _state.value = newState
+                }
         }
     }
 
-    fun updateUiState(newNote: NoteEntity) {
-        entryUiState = NoteEntryState(
+    private fun updateNoteState(newNote: NoteEntity) {
+        _state.value = _state.value.copy(
             currentNote = newNote,
             isEntryValid = validateInput(newNote)
-        ).also {
-            Log.e("newNote","item updated. Updated note is $newNote")
-        }
-    }
-
-    private fun validateInput(uiEntry: NoteEntity = entryUiState.currentNote) = with(uiEntry) {
-        title.isNotBlank() && content.isNotBlank()
-    }
-
-    suspend fun updateItem() {
-        if (validateInput()) {
-            localRepository.updateNote(
-                note = entryUiState.currentNote.toNote()
-            )
-        }
-    }
-
-    suspend fun deleteItem() {
-        localRepository.deleteNote(
-            uid = entryUiState.currentNote.toNote().uid
         )
+    }
+
+    private fun validateInput(uiEntry: NoteEntity = _state.value.currentNote): Boolean {
+        return with(uiEntry) {
+            title.isNotBlank() && content.isNotBlank()
+        }
+    }
+
+    private fun updateNote() {
+        viewModelScope.launch {
+            if (validateInput()) {
+                localRepository.updateNote(
+                    note = _state.value.currentNote.toNote()
+                )
+            }
+        }
+    }
+
+    private fun deleteNote() {
+        viewModelScope.launch {
+            localRepository.deleteNote(
+                uid = _state.value.currentNote.toNote().uid
+            )
+            _state.value = _state.value.copy(isDeleted = true)
+        }
+    }
+
+    private fun resetDeleteState() {
+        _state.value = _state.value.copy(isDeleted = false)
     }
 }

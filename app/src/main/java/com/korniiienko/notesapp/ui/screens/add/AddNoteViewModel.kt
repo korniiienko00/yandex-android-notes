@@ -1,8 +1,6 @@
 package com.korniiienko.notesapp.ui.screens.add
 
-import android.content.Context
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,16 +16,21 @@ class AddNoteViewModel(
     private val remoteRepository: RemoteRepository,
     private val localRepository: LocalRepository
 ) : ViewModel() {
-    var entryUiState by mutableStateOf(NoteEntryState())
+    var entryUiState by mutableStateOf(AddNoteState())
         private set
 
-    fun updateUiState(newNote: NoteEntity) {
-        entryUiState = NoteEntryState(
+    fun processIntent(intent: AddNoteIntent) {
+        when (intent) {
+            is AddNoteIntent.UpdateNote -> updateUiState(intent.note)
+            AddNoteIntent.SaveNote -> saveNote()
+        }
+    }
+
+    private fun updateUiState(newNote: NoteEntity) {
+        entryUiState = AddNoteState(
             currentNote = newNote,
             isEntryValid = validateInput(newNote)
-        ).also {
-            Log.e("newNote","new item updated. New note is $newNote")
-        }
+        )
     }
 
     private fun validateInput(uiState: NoteEntity = entryUiState.currentNote): Boolean {
@@ -36,16 +39,16 @@ class AddNoteViewModel(
         }
     }
 
-    fun saveItem() {
+    private fun saveNote() {
         viewModelScope.launch {
             if (validateInput()) {
                 localRepository.addNote(note = entryUiState.currentNote.toNote())
+                saveToFile()
             }
-            saveToFile()
         }
     }
 
-    suspend fun saveToFile() {
+    private suspend fun saveToFile() {
         localRepository.save()
     }
 }

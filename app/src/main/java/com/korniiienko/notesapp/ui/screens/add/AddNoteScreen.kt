@@ -22,7 +22,6 @@ import com.korniiienko.notesapp.navigation.Screen
 import com.korniiienko.notesapp.ui.shared.AddNoteComponent
 import com.korniiienko.notesapp.ui.shared.TopAppBar
 import com.korniiienko.notesapp.ui.theme.Spacing
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,16 +56,14 @@ fun AddNoteScreen(
         ) {
             AddNoteComponent(
                 noteEntity = viewModel.entryUiState.currentNote,
-                onValueChange = viewModel::updateUiState,
+                onValueChange = { viewModel.processIntent(AddNoteIntent.UpdateNote(it)) },
                 modifier = modifier
             )
 
             Button(
                 onClick = {
-                    coroutineScope.launch {
-                        viewModel.saveItem()
-                        navigateBack()
-                    }
+                    viewModel.processIntent(AddNoteIntent.SaveNote)
+                    navigateBack()
                 },
                 enabled = viewModel.entryUiState.isEntryValid,
                 modifier = modifier.fillMaxWidth()

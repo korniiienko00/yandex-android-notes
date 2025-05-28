@@ -41,7 +41,6 @@ import com.korniiienko.notesapp.ui.shared.LoadingCircle
 import com.korniiienko.notesapp.ui.shared.SwipeCard
 import com.korniiienko.notesapp.ui.shared.TopAppBar
 import com.korniiienko.notesapp.ui.theme.Spacing
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,11 +52,10 @@ fun NotesScreen(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
     viewModel: NotesViewModel = viewModel(factory = ViewModelProvider.Factory),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+    val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.loadFromFile()
+        viewModel.processIntent(NotesIntent.LoadNotes)
     }
 
     Scaffold(
@@ -84,29 +82,16 @@ fun NotesScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValue ->
 
-        when (val state = uiState) {
-            is NotesScreenState.Loading -> {
+        when (val currentState = state) {
+            is NotesState.Loading -> {
                 LoadingCircle()
             }
-
-            is NotesScreenState.Success -> {
-                HabitContent(
-                    notes = state.notes,
-                    onClickNote = {
-                        coroutineScope.launch {
-                            onClickOpenNote.invoke(it)
-                        }
-                    },
-                    onSwipeDelete = {
-                        coroutineScope.launch {
-                            viewModel.deleteNoteById(it)
-                        }
-                    },
-                    onSwipeEdit = {
-                        coroutineScope.launch {
-                            onClickOpenNote.invoke(it)
-                        }
-                    },
+            is NotesState.Success -> {
+                NotesContent(
+                    notes = currentState.notes,
+                    onClickNote = { onClickOpenNote(it) },
+                    onSwipeDelete = { viewModel.processIntent(NotesIntent.DeleteNote(it)) },
+                    onSwipeEdit = { onClickOpenNote(it) },
                     modifier = modifier,
                     contentPadding = paddingValue
                 )
@@ -117,7 +102,7 @@ fun NotesScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitContent(
+private fun NotesContent(
     notes: List<Note>,
     onClickNote: (String) -> Unit,
     onSwipeDelete: (String) -> Unit,
@@ -134,7 +119,7 @@ fun HabitContent(
         )
     } else {
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(150.dp),
+            columns = StaggeredGridCells.Adaptive(160.dp),
             verticalItemSpacing = 4.dp,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = modifier.fillMaxSize(),
