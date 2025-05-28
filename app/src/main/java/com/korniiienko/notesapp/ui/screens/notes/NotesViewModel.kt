@@ -31,12 +31,28 @@ class NotesViewModel(
             is NotesIntent.DeleteNote -> deleteNote(intent.noteId)
             is NotesIntent.DeleteAllFromServer -> deleteAllFromServer()
             is NotesIntent.SyncFromServer -> syncFromServer()
+            is NotesIntent.GetFromServer -> getNotesFromServer()
+        }
+    }
+
+    private fun getNotesFromServer(){
+        viewModelScope.launch {
+            remoteRepository.getNotes()
+                .onSuccess { result ->
+                    result.forEach { note ->
+                        localRepository.addNote(note)
+                    }
+                }
+                .onFailure {
+                    Log.e("NotesViewModel", "error occured: ${it.localizedMessage}")
+                }
         }
     }
 
     private fun deleteAllFromServer(){
         viewModelScope.launch {
             remoteRepository.clearAllNotes()
+            localRepository.deleteAll()
         }
     }
 

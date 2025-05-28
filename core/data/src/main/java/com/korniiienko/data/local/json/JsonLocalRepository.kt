@@ -1,7 +1,6 @@
 package com.korniiienko.data.local.json
 
 import android.content.Context
-import com.korniiienko.data.FileNotebook
 import com.korniiienko.domain.LocalRepository
 import com.korniiienko.model.Note
 import kotlinx.coroutines.flow.Flow
@@ -36,5 +35,9 @@ class JsonLocalRepository(
 
     override suspend fun load() {
         fileNotebook.loadFromFile()
+    }
+
+    override suspend fun deleteAll() {
+        fileNotebook.deleteAll()
     }
 }

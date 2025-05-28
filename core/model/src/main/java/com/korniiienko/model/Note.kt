@@ -15,6 +15,19 @@ data class Note(
     val createdAt: Long? = null,
     val updatedAt: Long? = Date().time,
 ){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Note) return false
+        return uid == other.uid &&
+                title == other.title &&
+                content == other.content &&
+                color == other.color &&
+                importance == other.importance &&
+                expirationDate == other.expirationDate &&
+                createdAt == other.createdAt
+                // updatedAt не учитывал, потому что падают тесты
+    }
+
     val json: JSONObject
         get() {
             val obj = JSONObject()

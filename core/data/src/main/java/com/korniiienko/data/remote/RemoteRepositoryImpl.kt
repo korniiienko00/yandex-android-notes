@@ -1,5 +1,7 @@
 package com.korniiienko.data.remote
 
+import com.korniiienko.data.remote.mappers.toModel
+import com.korniiienko.data.remote.mappers.toRemoteDto
 import com.korniiienko.model.remote.UidModel
 import com.korniiienko.data.remote.model.PatchNotesRequest
 import com.korniiienko.data.remote.model.SingleNoteRequest
@@ -171,7 +173,7 @@ class RemoteRepositoryImpl(
                 in 500..599 -> NetworkError("Server issue", this)
                 else -> NetworkError("HTTP error ${code()}", this)
             }
-            else -> NetworkError("Unexpected error", this)
+            else -> NetworkError("Unexpected error ${this.localizedMessage}", this)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.korniiienko.data
+package com.korniiienko.data.local.json
 
 import android.content.Context
 import com.korniiienko.domain.NotesRepository
@@ -93,6 +93,18 @@ class FileNotebook(
                 logger.debug("Загружено ${loadedNotes.size} заметок из файла")
             } catch (e: Exception) {
                 logger.error("Ошибка при загрузке заметок из файла", e)
+            }
+        }
+    }
+
+    override fun deleteAll() {
+        scope.launch {
+            _notes.emit(emptyList())
+            try {
+                file.delete()
+                logger.debug("Все заметки и файл удалены")
+            } catch (e: IOException) {
+                logger.error("Ошибка при удалении файла", e)
             }
         }
     }

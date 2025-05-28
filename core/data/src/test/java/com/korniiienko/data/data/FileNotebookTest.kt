@@ -3,7 +3,7 @@ package com.korniiienko.data.data
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import com.korniiienko.data.FileNotebook
+import com.korniiienko.data.local.json.FileNotebook
 import com.korniiienko.data.local.json.JsonLocalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

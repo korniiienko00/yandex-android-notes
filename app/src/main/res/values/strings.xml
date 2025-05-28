@@ -14,4 +14,5 @@
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
     <string name="sync">Синхронизировать</string>
+    <string name="get_items">Получить заметки с сервера</string>
 </resources>

@@ -11,4 +11,5 @@ interface LocalRepository {
     suspend fun getNoteByUid(uid: String): Flow<Note?>
     suspend fun save()
     suspend fun load()
+    suspend fun deleteAll()
 }

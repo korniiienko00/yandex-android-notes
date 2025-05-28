@@ -3,6 +3,8 @@ package com.korniiienko.notesapp.di
 import android.content.Context
 import com.korniiienko.data.local.json.JsonLocalRepository
 import com.korniiienko.data.ThemeRepositoryImpl
+import com.korniiienko.data.local.room.RoomLocalRepository
+import com.korniiienko.data.local.room.RoomNotesDatabase
 import com.korniiienko.data.remote.RemoteRepositoryImpl
 import com.korniiienko.data.remote.util.DeviceProvider
 import com.korniiienko.domain.LocalRepository
@@ -28,8 +30,14 @@ class AppDataContainer(private val context: Context) : AppContainer {
         )
     }
 
+//    override val localRepository: LocalRepository by lazy {
+//        JsonLocalRepository(context = context)
+//    }
+
     override val localRepository: LocalRepository by lazy {
-        JsonLocalRepository(context = context)
+        RoomLocalRepository(
+            dao = RoomNotesDatabase.getDatabase(context).noteDao()
+        )
     }
     override val themeRepository: ThemeRepository = ThemeRepositoryImpl(context)
 }

@@ -1,4 +1,4 @@
-package com.korniiienko.data.remote
+package com.korniiienko.data.remote.mappers
 
 import android.graphics.Color
 import com.korniiienko.data.remote.model.NoteItemDto
@@ -31,7 +31,7 @@ fun NoteItemDto.toModel(): Note = Note(
     importance = when (this.importance.lowercase()) {
         "low" -> Importance.LOW
         "important" -> Importance.IMPORTANT
-        "normal" -> Importance.BASIC
+        "basic" -> Importance.BASIC
         else -> Importance.BASIC
     },
     color = this.color?.let {

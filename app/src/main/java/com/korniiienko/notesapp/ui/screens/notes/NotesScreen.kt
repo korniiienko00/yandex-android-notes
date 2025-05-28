@@ -1,6 +1,7 @@
 package com.korniiienko.notesapp.ui.screens.notes
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -126,6 +127,9 @@ fun NotesScreen(
                         openDialog.value = true
                     },
                     onSwipeEdit = { onClickOpenNote(it) },
+                    onClickGetNotesFromServer = {
+                        viewModel.processIntent(NotesIntent.GetFromServer)
+                    },
                     modifier = modifier,
                     contentPadding = paddingValue
                 )
@@ -141,16 +145,33 @@ private fun NotesContent(
     onClickNote: (String) -> Unit,
     onSwipeDelete: (String) -> Unit,
     onSwipeEdit: (String) -> Unit,
+    onClickGetNotesFromServer: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
 ) {
     if (notes.isEmpty()) {
-        Text(
-            text = stringResource(R.string.no_items),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = modifier.fillMaxWidth(),
-        )
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(Spacing.medium),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(R.string.no_items),
+                textAlign = TextAlign.Center,
+                modifier = modifier.fillMaxWidth(),
+            )
+
+            Button(onClick = onClickGetNotesFromServer) {
+                Text(
+                    text = stringResource(R.string.get_items),
+                    textAlign = TextAlign.Center,
+                    modifier = modifier.fillMaxWidth(),
+                )
+            }
+        }
+
     } else {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(160.dp),

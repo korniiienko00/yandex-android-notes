@@ -11,4 +11,5 @@ interface NotesRepository {
     fun deleteNote(uid: String)
     fun saveToFile()
     fun loadFromFile()
+    fun deleteAll()
 }
