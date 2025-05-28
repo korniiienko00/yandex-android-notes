@@ -1,7 +1,7 @@
-package com.korniiienko.notesapp.data
+package com.korniiienko.domain
 
+import com.korniiienko.model.Note
 import kotlinx.coroutines.flow.Flow
-import com.korniiienko.notesapp.model.Note
 
 interface NotesRepository {
     val notes: Flow<List<Note>>

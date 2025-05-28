@@ -1,15 +1,14 @@
 package com.korniiienko.notesapp.ui.screens.add
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.notesapp.model.NoteEntity
-import com.korniiienko.notesapp.model.toNote
-import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.data.repository.RemoteRepository
+import com.korniiienko.data.LocalRepository
+import com.korniiienko.data.RemoteRepository
+import com.korniiienko.notesapp.ui.screens.NoteEntity
+import com.korniiienko.notesapp.ui.screens.toNote
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel(

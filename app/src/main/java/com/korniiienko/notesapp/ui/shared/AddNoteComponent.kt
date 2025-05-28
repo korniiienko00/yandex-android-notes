@@ -26,8 +26,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.korniiienko.notesapp.R
-import com.korniiienko.notesapp.model.NoteEntity
-import com.korniiienko.notesapp.model.toFormattedDate
+import com.korniiienko.notesapp.ui.screens.NoteEntity
+import com.korniiienko.notesapp.ui.screens.toFormattedDate
 import com.korniiienko.notesapp.ui.shared.components.PaletteDialog
 import com.korniiienko.notesapp.ui.shared.components.ColorPicker
 import com.korniiienko.notesapp.ui.shared.components.ImportanceComponent

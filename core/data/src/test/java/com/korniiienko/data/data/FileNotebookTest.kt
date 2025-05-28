@@ -1,16 +1,15 @@
-package com.korniiienko.notesapp.data
+package com.korniiienko.data.data
 
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import com.korniiienko.notesapp.model.Note
-import com.korniiienko.notesapp.data.repository.JsonLocalRepository
+import com.korniiienko.data.FileNotebook
+import com.korniiienko.data.local.JsonLocalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest 
 import kotlinx.coroutines.test.setMain
@@ -52,7 +51,7 @@ class JsonLocalRepositoryTest {
 
     @Test
     fun `add note should save to file`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         repository.addNote(note)
         repository.save()
 
@@ -64,7 +63,7 @@ class JsonLocalRepositoryTest {
 
     @Test
     fun `load should read from file`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         repository.addNote(note)
         repository.save()
 
@@ -81,7 +80,7 @@ class JsonLocalRepositoryTest {
 
     @Test
     fun `update note should modify file`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         repository.addNote(note)
         repository.save()
         testScheduler.runCurrent()
@@ -101,7 +100,7 @@ class JsonLocalRepositoryTest {
 
     @Test
     fun `notes flow should emit current state`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         repository.addNote(note)
 
         val notes = repository.notes.first()
@@ -135,7 +134,7 @@ class FileNotebookTest {
 
     @Test
     fun `saveToFile should create file with notes`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         fileNotebook.addNote(note)
         fileNotebook.saveToFile()
 
@@ -146,7 +145,7 @@ class FileNotebookTest {
 
     @Test
     fun `loadFromFile should restore notes`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         fileNotebook.addNote(note)
         fileNotebook.saveToFile()
 
@@ -191,7 +190,7 @@ class FileNotebookTest {
 
     @Test
     fun `addNote should update flow`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         fileNotebook.addNote(note)
 
         runBlocking {
@@ -203,7 +202,7 @@ class FileNotebookTest {
 
     @Test
     fun `updateNote should modify existing note`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         fileNotebook.addNote(note)
 
         val updatedNote = note.copy(title = "Updated")
@@ -217,7 +216,7 @@ class FileNotebookTest {
 
     @Test
     fun `deleteNote should remove note`() = runTest  {
-        val note = Note.create("Test", "Content")
+        val note = com.korniiienko.model.Note.create("Test", "Content")
         fileNotebook.addNote(note)
         fileNotebook.deleteNote(note.uid)
 

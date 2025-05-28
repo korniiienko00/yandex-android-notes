@@ -1,17 +1,13 @@
 package com.korniiienko.notesapp.ui.screens.notes
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.data.repository.RemoteRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.korniiienko.data.LocalRepository
+import com.korniiienko.data.RemoteRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NotesViewModel(

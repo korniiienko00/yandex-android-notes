@@ -1,6 +1,8 @@
-package com.korniiienko.notesapp.model
+package com.korniiienko.notesapp.ui.screens
 
 import android.graphics.Color
+import com.korniiienko.model.Importance
+import com.korniiienko.model.Note
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter

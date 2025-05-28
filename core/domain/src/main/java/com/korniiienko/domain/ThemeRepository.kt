@@ -1,6 +1,6 @@
-package com.korniiienko.notesapp.data
+package com.korniiienko.domain
 
-import com.korniiienko.notesapp.model.AppTheme
+import com.korniiienko.model.AppTheme
 
 interface ThemeRepository {
     suspend fun getTheme(): AppTheme

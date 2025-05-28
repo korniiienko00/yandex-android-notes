@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp.model
+package com.korniiienko.model
 
 import android.graphics.Color
 import org.json.JSONObject
@@ -44,7 +44,8 @@ data class Note(
 
             val importance = when (json.optString("importance", "BASIC").uppercase()) {
                 "LOW" -> Importance.LOW
-                "HIGH", "IMPORTANT" -> Importance.IMPORTANT
+                "BASIC" -> Importance.BASIC
+                "IMPORTANT" -> Importance.IMPORTANT
                 else -> Importance.BASIC
             }
 

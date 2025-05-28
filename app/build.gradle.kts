@@ -46,12 +46,12 @@ android {
 
 dependencies {
 
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
+
     // вью модель для mvvm
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    // logback для логов репозитория
-    implementation("com.github.tony19:logback-android:3.0.0")
-    implementation ("org.slf4j:slf4j-api:2.0.17")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,10 +72,4 @@ dependencies {
     // навигация андроид
     implementation(libs.androidx.navigation.compose)
 
-    // для тестов json
-    testImplementation("org.robolectric:robolectric:4.10.3")
-    testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:4.5.1")
 }

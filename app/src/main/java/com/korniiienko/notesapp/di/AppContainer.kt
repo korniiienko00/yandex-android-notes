@@ -1,12 +1,12 @@
 package com.korniiienko.notesapp.di
 
 import android.content.Context
-import com.korniiienko.notesapp.data.ThemeRepository
-import com.korniiienko.notesapp.data.repository.ThemeRepositoryImpl
-import com.korniiienko.notesapp.data.repository.JsonLocalRepository
-import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.data.repository.NetworkRemoteRepository
-import com.korniiienko.notesapp.data.repository.RemoteRepository
+import com.korniiienko.data.local.JsonLocalRepository
+import com.korniiienko.data.ThemeRepositoryImpl
+import com.korniiienko.data.remote.RemoteRepositoryImpl
+import com.korniiienko.domain.LocalRepository
+import com.korniiienko.domain.RemoteRepository
+import com.korniiienko.domain.ThemeRepository
 
 interface AppContainer {
     val localRepository: LocalRepository
@@ -16,7 +16,7 @@ interface AppContainer {
 
 class AppDataContainer(private val context: Context) : AppContainer {
     override val remoteRepository: RemoteRepository by lazy {
-        NetworkRemoteRepository()
+        RemoteRepositoryImpl()
     }
 
     override val localRepository: LocalRepository by lazy {

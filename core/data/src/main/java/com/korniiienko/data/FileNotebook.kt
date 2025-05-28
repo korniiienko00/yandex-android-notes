@@ -1,7 +1,8 @@
-package com.korniiienko.notesapp.data
+package com.korniiienko.data
 
 import android.content.Context
-import com.korniiienko.notesapp.model.Note
+import com.korniiienko.domain.NotesRepository
+import com.korniiienko.model.Note
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.CoroutineScope

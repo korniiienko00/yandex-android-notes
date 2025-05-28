@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp.model
+package com.korniiienko.model
 
 enum class Importance {
     LOW,

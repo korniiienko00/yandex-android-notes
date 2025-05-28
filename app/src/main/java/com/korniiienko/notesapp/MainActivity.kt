@@ -10,8 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.LocalThemeChange
 import com.example.compose.NotesAppTheme
+import com.korniiienko.model.AppTheme
 import com.korniiienko.notesapp.di.ViewModelProvider
-import com.korniiienko.notesapp.model.AppTheme
 import com.korniiienko.notesapp.ui.NotesApp
 import com.korniiienko.notesapp.ui.screens.MainViewModel
 

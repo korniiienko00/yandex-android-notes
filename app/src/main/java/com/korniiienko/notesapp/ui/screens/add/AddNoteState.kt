@@ -1,6 +1,6 @@
 package com.korniiienko.notesapp.ui.screens.add
 
-import com.korniiienko.notesapp.model.NoteEntity
+import com.korniiienko.notesapp.ui.screens.NoteEntity
 
 data class AddNoteState(
     val currentNote: NoteEntity = NoteEntity(),

@@ -3,10 +3,10 @@ package com.korniiienko.notesapp.ui.screens.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.model.NoteEntity
-import com.korniiienko.notesapp.model.toNote
-import com.korniiienko.notesapp.model.toUiState
+import com.korniiienko.data.LocalRepository
+import com.korniiienko.notesapp.ui.screens.NoteEntity
+import com.korniiienko.notesapp.ui.screens.toNote
+import com.korniiienko.notesapp.ui.screens.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull

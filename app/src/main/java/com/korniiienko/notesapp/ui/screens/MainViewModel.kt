@@ -2,8 +2,7 @@ package com.korniiienko.notesapp.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.notesapp.data.ThemeRepository
-import com.korniiienko.notesapp.model.AppTheme
+import com.korniiienko.domain.ThemeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,8 +12,8 @@ class MainViewModel(
     private val themeRepository: ThemeRepository,
 ) : ViewModel() {
 
-    private val _themeState = MutableStateFlow(AppTheme.SYSTEM)
-    val themeState: StateFlow<AppTheme> = _themeState.asStateFlow()
+    private val _themeState = MutableStateFlow(com.korniiienko.model.AppTheme.SYSTEM)
+    val themeState: StateFlow<com.korniiienko.model.AppTheme> = _themeState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -23,7 +22,7 @@ class MainViewModel(
         }
     }
 
-    fun setTheme(theme: AppTheme) {
+    fun setTheme(theme: com.korniiienko.model.AppTheme) {
         viewModelScope.launch {
             themeRepository.setTheme(theme)
             _themeState.value = theme

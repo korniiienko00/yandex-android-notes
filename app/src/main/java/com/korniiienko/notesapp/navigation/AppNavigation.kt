@@ -10,7 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.korniiienko.notesapp.model.AppTheme
+import com.korniiienko.model.AppTheme
 import com.korniiienko.notesapp.ui.screens.add.AddNoteScreen
 import com.korniiienko.notesapp.ui.screens.edit.EditNoteScreen
 import com.korniiienko.notesapp.ui.screens.notes.NotesScreen

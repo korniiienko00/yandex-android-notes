@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.compose.LocalThemeChange
 import com.korniiienko.notesapp.R
-import com.korniiienko.notesapp.model.AppTheme
+import com.korniiienko.model.AppTheme
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
