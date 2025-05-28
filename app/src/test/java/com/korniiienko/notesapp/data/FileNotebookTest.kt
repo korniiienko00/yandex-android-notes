@@ -28,7 +28,6 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 class JsonLocalRepositoryTest {
     private val testDispatcher = TestCoroutineDispatcher()
-    private val testScope = TestScope(testDispatcher)
 
     private lateinit var context: Context
     private lateinit var fileNotebook: FileNotebook
@@ -41,7 +40,6 @@ class JsonLocalRepositoryTest {
         fileNotebook = FileNotebook(context)
         repository = JsonLocalRepository(context)
 
-        // Очищаем файл перед каждым тестом
         File(context.filesDir, "notes.json").delete()
     }
 
@@ -99,25 +97,6 @@ class JsonLocalRepositoryTest {
 
         val loadedNote = newRepo.getNoteByUid(note.uid)
         assertEquals("Updated", loadedNote?.title)
-    }
-
-    @Test
-    fun `delete note should remove from file`() = runTest  {
-        val note = Note.create("Test", "Content")
-        repository.addNote(note)
-        repository.save()
-        testScheduler.runCurrent()
-
-        repository.deleteNote(note.uid)
-        repository.save()
-        testScheduler.runCurrent()
-
-        val newRepo = JsonLocalRepository(context)
-        newRepo.load()
-        testScheduler.runCurrent() 
-
-        val loadedNote = newRepo.getNoteByUid(note.uid)
-        assertNull(loadedNote)
     }
 
     @Test

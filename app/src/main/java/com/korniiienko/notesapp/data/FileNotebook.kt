@@ -53,9 +53,10 @@ class FileNotebook(
 
     override fun deleteNote(uid: String) {
         scope.launch {
-            val updatedList = _notes.value.filterNot { it.uid == uid }
+            val updatedList = _notes.value.toMutableList().apply {
+                removeAll { it.uid == uid }
+            }
             _notes.emit(updatedList)
-            logger.debug("Удалена заметка UID=$uid")
             saveToFile()
         }
     }
