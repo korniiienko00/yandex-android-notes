@@ -28,9 +28,9 @@ class EditNoteViewModel(
         when (intent) {
             is EditNoteIntent.LoadNote -> loadNote(intent.uid)
             is EditNoteIntent.UpdateNoteEntity -> updateNoteState(intent.note)
-            EditNoteIntent.UpdateNote -> updateNote()
-            EditNoteIntent.DeleteNote -> deleteNote()
-            EditNoteIntent.ResetDeleteState -> resetDeleteState()
+            is EditNoteIntent.UpdateNote -> updateNote()
+            is EditNoteIntent.DeleteNote -> deleteNote()
+            is EditNoteIntent.ResetDeleteState -> resetDeleteState()
         }
     }
 

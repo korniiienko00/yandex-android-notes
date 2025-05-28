@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class AddNoteViewModel(
     private val remoteRepository: RemoteRepository,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
 ) : ViewModel() {
     var entryUiState by mutableStateOf(AddNoteState())
         private set
@@ -22,7 +22,7 @@ class AddNoteViewModel(
     fun processIntent(intent: AddNoteIntent) {
         when (intent) {
             is AddNoteIntent.UpdateNote -> updateUiState(intent.note)
-            AddNoteIntent.SaveNote -> saveNote()
+            is AddNoteIntent.SaveNote -> saveNote()
         }
     }
 
@@ -40,13 +40,13 @@ class AddNoteViewModel(
     }
 
     private fun saveNote() {
-        viewModelScope.launch {
-            if (validateInput()) {
+        if (validateInput()) {
+            viewModelScope.launch {
                 val newNote = entryUiState.currentNote.toNote()
 
                 remoteRepository.addNote(note = newNote)
                     .onSuccess {
-                        localRepository.addNote(note = newNote )
+                        localRepository.addNote(note = newNote)
                     }
                     .onFailure {
                         Log.e("AddNoteViewModel", "error occured: ${it.localizedMessage}")

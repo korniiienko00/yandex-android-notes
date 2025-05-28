@@ -14,7 +14,7 @@ data class NoteEntity(
     val content: String = "",
     val color: Int = Color.WHITE,
     val importance: Importance = Importance.BASIC,
-    val selfDestructDate:  Long? = null
+    val selfDestructDate: Long? = null,
 )
 
 fun NoteEntity.toNote(): Note = Note(
