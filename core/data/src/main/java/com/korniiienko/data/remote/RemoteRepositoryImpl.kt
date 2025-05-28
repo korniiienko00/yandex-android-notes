@@ -16,93 +16,93 @@ import javax.net.ssl.SSLHandshakeException
 class RemoteRepositoryImpl(
     private val api: RemoteApiService,
 ) : RemoteRepository {
-    private val logger = LoggerFactory.getLogger(RemoteRepositoryImpl::class.java)
-    private var revision: Int = 0
+    private val log = LoggerFactory.getLogger("NotesRemoteRepo")
+    private var syncVersion: Int = 0
 
     override suspend fun getNotes(): NetworkResult<List<Note>> {
         return try {
-            logger.debug("Fetching notes from backend")
+            log.trace("Initiating notes synchronization")
             val response = api.getNotes()
-            revision = response.revision
-            logger.info("Successfully fetched ${response.list.size} notes, new revision: $revision")
+            syncVersion = response.revision
+            log.debug("Synchronized ${response.list.size} notes (v$syncVersion)")
             NetworkResult.Success(response.list.map { it.toModel() })
         } catch (e: Exception) {
-            logger.error("Failed to fetch notes", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Notes synchronization failed", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
     override suspend fun getNote(noteUid: String): NetworkResult<Note> {
         return try {
-            logger.debug("Fetching note with UID: $noteUid")
+            log.trace("Requesting note [$noteUid]")
             val response = api.getNote(noteUid = noteUid)
-            revision = response.revision
-            logger.info("Successfully fetched note ${response.element.id}, new revision: $revision")
+            syncVersion = response.revision
+            log.debug("Retrieved note [${response.element.id}] (v$syncVersion)")
             NetworkResult.Success(response.element.toModel())
         } catch (e: Exception) {
-            logger.error("Failed to fetch note $noteUid", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Failed to retrieve note [$noteUid]", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
     override suspend fun addNote(note: Note, deviceId: String): NetworkResult<UidModel> {
         return try {
-            val currentRevision = api.getNotes().revision
-            logger.debug("Adding new note: ${note.title} (${note.uid})")
+            val currentVersion = api.getNotes().revision
+            log.trace("Creating new note [${note.title}]")
 
             val response = api.addNote(
-                revision = currentRevision,
+                revision = currentVersion,
                 request = SingleNoteRequest(note.toRemoteDto(deviceId))
             )
-            revision = response.revision
-            logger.info("Successfully added note ${response.element.id}, new revision: $revision")
+            syncVersion = response.revision
+            log.debug("Created note [${response.element.id}] (v$syncVersion)")
             NetworkResult.Success(UidModel(response.element.id))
         } catch (e: Exception) {
-            logger.error("Failed to add note ${note.uid}", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Failed to create note [${note.uid}]", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
     override suspend fun updateNote(note: Note, deviceId: String): NetworkResult<UidModel> {
         return try {
-            val currentRevision = api.getNotes().revision
-            logger.debug("Updating note: ${note.title} (${note.uid})")
+            val currentVersion = api.getNotes().revision
+            log.trace("Updating note [${note.uid}]")
 
             try {
                 val response = api.updateNote(
-                    revision = currentRevision,
+                    revision = currentVersion,
                     noteUid = note.uid,
                     request = SingleNoteRequest(note.toRemoteDto(deviceId))
                 )
 
-                revision = response.revision
-                logger.info("Successfully updated note ${response.element.id}, new revision: $revision")
+                syncVersion = response.revision
+                log.debug("Updated note [${response.element.id}] (v$syncVersion)")
                 NetworkResult.Success(UidModel(response.element.id))
             } catch (e: HttpException) {
                 if (e.code() == 404) {
-                    logger.warn("Note not found (404), trying to add as new")
+                    log.info("Note not found, creating new entry")
                     addNote(note, deviceId)
                 } else {
                     throw e
                 }
             }
         } catch (e: Exception) {
-            logger.error("Failed to update note ${note.uid}", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Failed to update note [${note.uid}]", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
     override suspend fun deleteNote(noteUid: String): NetworkResult<Unit> {
         return try {
-            logger.debug("Deleting note with UID: $noteUid")
-            val currentRevision = api.getNotes().revision
-            val response = api.deleteNote(revision = currentRevision, noteUid = noteUid)
-            revision = response.revision
-            logger.info("Successfully deleted note $noteUid, new revision: $revision")
+            log.trace("Removing note [$noteUid]")
+            val currentVersion = api.getNotes().revision
+            val response = api.deleteNote(revision = currentVersion, noteUid = noteUid)
+            syncVersion = response.revision
+            log.debug("Removed note [$noteUid] (v$syncVersion)")
             NetworkResult.Success(Unit)
         } catch (e: Exception) {
-            logger.error("Failed to delete note $noteUid", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Failed to remove note [$noteUid]", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
@@ -111,67 +111,66 @@ class RemoteRepositoryImpl(
         deviceId: String,
     ): NetworkResult<List<Note>> {
         return try {
-            logger.debug("Patching ${notes.size} notes")
-            val currentRevision = api.getNotes().revision
+            log.trace("Bulk updating ${notes.size} notes")
+            val currentVersion = api.getNotes().revision
             val response = api.patchNotes(
-                revision = currentRevision,
+                revision = currentVersion,
                 request = PatchNotesRequest(notes.map { it.toRemoteDto(deviceId) })
             )
-            revision = response.revision
-            logger.info("Successfully patched notes, new revision: $revision")
+            syncVersion = response.revision
+            log.debug("Bulk update completed (v$syncVersion)")
             NetworkResult.Success(response.list.map { it.toModel() })
         } catch (e: Exception) {
-            logger.error("Failed to patch notes", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Bulk update failed", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
-    override suspend fun getNotesWithThreshold(generateFailsThreshold: Int?): NetworkResult<List<Note>> {
+    override suspend fun getNotesWithThreshold(threshold: Int?): NetworkResult<List<Note>> {
         return try {
-            logger.debug("Fetching notes with fail threshold: $generateFailsThreshold")
-            val response = api.getNotes(generateFailsThreshold = generateFailsThreshold)
-            revision = response.revision
-            logger.info("Successfully fetched ${response.list.size} notes with threshold, new revision: $revision")
+            log.trace("Fetching with failure threshold: $threshold")
+            val response = api.getNotes(generateFailsThreshold = threshold)
+            syncVersion = response.revision
+            log.debug("Threshold fetch completed (v$syncVersion)")
             NetworkResult.Success(response.list.map { it.toModel() })
         } catch (e: Exception) {
-            logger.error("Failed to fetch notes with threshold", e)
-            NetworkResult.Failure(e.mapToNetworkError())
+            log.warn("Threshold fetch failed", e)
+            NetworkResult.Failure(e.toCustomError())
         }
     }
 
     override suspend fun clearAllNotes() {
         try {
-            var currentRevision = api.getNotes().revision
+            var currentVersion = api.getNotes().revision
             api.getNotes().list.forEach { note ->
                 val response = api.deleteNote(
-                    revision = currentRevision,
+                    revision = currentVersion,
                     noteUid = note.id
                 )
-                currentRevision = response.revision
+                currentVersion = response.revision
             }
+            log.info("All notes cleared")
         } catch (e: Exception) {
-            logger.error("Failed to clear notes", e)
+            log.error("Failed to clear all notes", e)
         }
     }
 
-    private fun Throwable.mapToNetworkError(): Throwable {
+    private fun Throwable.toCustomError(): Throwable {
         return when (this) {
-            is SocketTimeoutException,
-            is SSLHandshakeException,
-            is IOException -> NetworkError("Network error occurred", this)
-
+            is SocketTimeoutException -> NetworkError("Connection timeout", this)
+            is SSLHandshakeException -> NetworkError("Security error", this)
+            is IOException -> NetworkError("Network unavailable", this)
             is HttpException -> when (code()) {
-                400 -> NetworkError("Bad request", this)
-                401 -> NetworkError("Unauthorized", this)
-                404 -> NetworkError("Not found", this)
-                409 -> NetworkError("Conflict", this)
-                413 -> NetworkError("Payload too large", this)
-                429 -> NetworkError("Too many requests", this)
-                in 500..599 -> NetworkError("Server error", this)
-                else -> NetworkError("HTTP error", this)
+                400 -> NetworkError("Invalid request", this)
+                401 -> NetworkError("Authentication required", this)
+                404 -> NetworkError("Resource not found", this)
+                409 -> NetworkError("Version conflict", this)
+                413 -> NetworkError("Data too large", this)
+                429 -> NetworkError("Too many attempts", this)
+                in 500..599 -> NetworkError("Server issue", this)
+                else -> NetworkError("HTTP error ${code()}", this)
             }
-
-            else -> NetworkError("Unknown network error", this)
+            else -> NetworkError("Unexpected error", this)
         }
     }
 }

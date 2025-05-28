@@ -11,6 +11,6 @@ interface RemoteRepository {
     suspend fun updateNote(note: Note, deviceId: String): NetworkResult<UidModel>
     suspend fun deleteNote(noteUid: String): NetworkResult<Unit>
     suspend fun patchNotes(notes: List<Note>, deviceId: String): NetworkResult<List<Note>>
-    suspend fun getNotesWithThreshold(generateFailsThreshold: Int?): NetworkResult<List<Note>>
+    suspend fun getNotesWithThreshold(threshold: Int?): NetworkResult<List<Note>>
     suspend fun clearAllNotes()
 }

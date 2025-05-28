@@ -1,9 +1,7 @@
-package com.korniiienko.data.data.remote
+package com.korniiienko.data.remote
 
 import android.graphics.Color
 import com.korniiienko.data.remote.model.NoteItemDto
-import com.korniiienko.data.remote.toModel
-import com.korniiienko.data.remote.toRemoteDto
 import com.korniiienko.model.Importance
 import com.korniiienko.model.Note
 import org.junit.Assert.assertEquals
