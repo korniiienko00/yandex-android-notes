@@ -67,6 +67,12 @@ fun NotesScreen(
                 appTheme = appTheme,
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
+                onSync = {
+                    viewModel.processIntent(NotesIntent.SyncFromServer)
+                },
+                onDeleteAllFromServer = {
+                    viewModel.processIntent(NotesIntent.DeleteAllFromServer)
+                }
             )
         },
         floatingActionButton = {

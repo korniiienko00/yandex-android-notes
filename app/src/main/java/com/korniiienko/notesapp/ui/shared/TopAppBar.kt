@@ -3,6 +3,9 @@ package com.korniiienko.notesapp.ui.shared
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +28,8 @@ fun TopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit = { },
+    onSync: () -> Unit = { },
+    onDeleteAllFromServer: () -> Unit = { },
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = name, style = MaterialTheme.typography.headlineSmall) },
@@ -61,6 +66,22 @@ fun TopAppBar(
                             contentDescription = stringResource(R.string.switch_theme)
                         )
                     }
+                }
+            }
+        },
+        actions = {
+            if (!canNavigateBack) {
+                IconButton(onClick = onSync) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = stringResource(R.string.sync)
+                    )
+                }
+                IconButton(onClick = onDeleteAllFromServer) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = stringResource(R.string.delete)
+                    )
                 }
             }
         }

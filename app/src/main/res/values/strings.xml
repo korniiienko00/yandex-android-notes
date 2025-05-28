@@ -13,4 +13,5 @@
     <string name="sure_delete">Вы точно хотите удалить заметку?</string>
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
+    <string name="sync">Синхронизировать</string>
 </resources>
