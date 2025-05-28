@@ -100,6 +100,7 @@ fun NotesScreen(
                                 onClick = {
                                     currentState.currentNoteUid?.let {
                                         viewModel.processIntent(NotesIntent.DeleteNote(it))
+                                        openDialog.value = false
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onErrorContainer),

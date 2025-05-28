@@ -4,6 +4,7 @@ import android.content.Context
 import com.korniiienko.data.local.json.JsonLocalRepository
 import com.korniiienko.data.ThemeRepositoryImpl
 import com.korniiienko.data.remote.RemoteRepositoryImpl
+import com.korniiienko.data.remote.util.DeviceProvider
 import com.korniiienko.domain.LocalRepository
 import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.domain.ThemeRepository
@@ -15,9 +16,15 @@ interface AppContainer {
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
+
+    private val networkManager by lazy { NetworkManager() }
+    private val deviceProvider by lazy { DeviceProvider(context) }
+
+
     override val remoteRepository: RemoteRepository by lazy {
         RemoteRepositoryImpl(
-            api = NetworkManager().apiService
+            api = networkManager.apiService,
+            deviceProvider = deviceProvider
         )
     }
 
