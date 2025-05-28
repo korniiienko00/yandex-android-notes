@@ -10,6 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest 
 import kotlinx.coroutines.test.setMain
@@ -27,6 +28,8 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 class JsonLocalRepositoryTest {
     private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestScope(testDispatcher)
+
     private lateinit var context: Context
     private lateinit var fileNotebook: FileNotebook
     private lateinit var repository: JsonLocalRepository
@@ -44,6 +47,7 @@ class JsonLocalRepositoryTest {
 
     @After
     fun tearDown() {
+        fileNotebook.close()
         Dispatchers.resetMain()
         testDispatcher.cleanupTestCoroutines()
     }
@@ -82,14 +86,18 @@ class JsonLocalRepositoryTest {
         val note = Note.create("Test", "Content")
         repository.addNote(note)
         repository.save()
+        testScheduler.runCurrent()
 
         val updatedNote = note.copy(title = "Updated")
         repository.updateNote(updatedNote)
         repository.save()
+        testScheduler.runCurrent()
 
-        repository.load()
-        val loadedNote = repository.getNoteByUid(note.uid)
+        val newRepo = JsonLocalRepository(context)
+        newRepo.load()
+        testScheduler.runCurrent()
 
+        val loadedNote = newRepo.getNoteByUid(note.uid)
         assertEquals("Updated", loadedNote?.title)
     }
 
@@ -98,13 +106,17 @@ class JsonLocalRepositoryTest {
         val note = Note.create("Test", "Content")
         repository.addNote(note)
         repository.save()
+        testScheduler.runCurrent()
 
         repository.deleteNote(note.uid)
         repository.save()
+        testScheduler.runCurrent()
 
-        repository.load()
-        val loadedNote = repository.getNoteByUid(note.uid)
+        val newRepo = JsonLocalRepository(context)
+        newRepo.load()
+        testScheduler.runCurrent() 
 
+        val loadedNote = newRepo.getNoteByUid(note.uid)
         assertNull(loadedNote)
     }
 

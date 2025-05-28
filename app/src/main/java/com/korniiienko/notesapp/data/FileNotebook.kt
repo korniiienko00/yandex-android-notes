@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -92,5 +93,9 @@ class FileNotebook(
                 logger.error("Ошибка при загрузке заметок из файла", e)
             }
         }
+    }
+
+    fun close() {
+        scope.cancel()
     }
 }
