@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -23,16 +25,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.korniiienko.notesapp.R
-import com.korniiienko.notesapp.di.ViewModelProvider
 import com.korniiienko.model.AppTheme
 import com.korniiienko.model.Note
+import com.korniiienko.notesapp.R
+import com.korniiienko.notesapp.di.ViewModelProvider
 import com.korniiienko.notesapp.navigation.Screen
 import com.korniiienko.notesapp.ui.shared.LoadingCircle
 import com.korniiienko.notesapp.ui.shared.SwipeCard
@@ -50,6 +54,7 @@ fun NotesScreen(
     viewModel: NotesViewModel = viewModel(factory = ViewModelProvider.Factory),
 ) {
     val state by viewModel.uiState.collectAsState()
+    val openDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.processIntent(NotesIntent.LoadNotes)
@@ -83,11 +88,36 @@ fun NotesScreen(
             is NotesState.Loading -> {
                 LoadingCircle()
             }
+
             is NotesState.Success -> {
+                if (openDialog.value) {
+                    AlertDialog(
+                        onDismissRequest = { openDialog.value = false },
+                        title = { Text(stringResource(R.string.delete_note)) },
+                        text = { Text(stringResource(R.string.sure_delete)) },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    currentState.currentNoteUid?.let {
+                                        viewModel.processIntent(NotesIntent.DeleteNote(it))
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onErrorContainer),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = stringResource(R.string.confirm))
+                            }
+                        }
+                    )
+                }
+
                 NotesContent(
                     notes = currentState.notes,
                     onClickNote = { onClickOpenNote(it) },
-                    onSwipeDelete = { viewModel.processIntent(NotesIntent.DeleteNote(it)) },
+                    onSwipeDelete = {
+                        currentState.currentNoteUid = it
+                        openDialog.value = true
+                    },
                     onSwipeEdit = { onClickOpenNote(it) },
                     modifier = modifier,
                     contentPadding = paddingValue

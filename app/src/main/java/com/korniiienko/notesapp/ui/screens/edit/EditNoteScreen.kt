@@ -107,7 +107,10 @@ fun EditNoteScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.small)
+            ) {
                 OutlinedButton(
                     onClick = { openDialog.value = true },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onErrorContainer),

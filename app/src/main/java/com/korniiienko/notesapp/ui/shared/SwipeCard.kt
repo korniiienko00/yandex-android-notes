@@ -101,7 +101,6 @@ fun SwipeCard(
     ) {
         NoteItem(
             note = note,
-            onClickDelete = onActionDelete,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
@@ -113,7 +112,6 @@ fun SwipeCard(
 @Composable
 private fun NoteItem(
     note: Note,
-    onClickDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -143,18 +141,7 @@ private fun NoteItem(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(
-                    onClick = onClickDelete,
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete note",
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
-                }
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
@@ -163,7 +150,6 @@ private fun NoteItem(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                 modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(12.dp))
 
             ImportanceBadge(importance = note.importance)
