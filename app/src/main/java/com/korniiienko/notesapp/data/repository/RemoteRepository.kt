@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp.repository
+package com.korniiienko.notesapp.data.repository
 
 interface RemoteRepository {
 }

@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.korniiienko.notesapp.model.NoteEntity
 import com.korniiienko.notesapp.model.toNote
-import com.korniiienko.notesapp.repository.LocalRepository
-import com.korniiienko.notesapp.repository.RemoteRepository
+import com.korniiienko.notesapp.data.repository.LocalRepository
+import com.korniiienko.notesapp.data.repository.RemoteRepository
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel(

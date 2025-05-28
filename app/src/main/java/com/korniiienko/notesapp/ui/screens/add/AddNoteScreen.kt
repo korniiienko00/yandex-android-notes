@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.korniiienko.notesapp.R
-import com.korniiienko.notesapp.ViewModelProvider
+import com.korniiienko.notesapp.di.ViewModelProvider
 import com.korniiienko.notesapp.navigation.Screen
 import com.korniiienko.notesapp.ui.shared.AddNoteComponent
 import com.korniiienko.notesapp.ui.shared.TopAppBar
@@ -69,8 +69,7 @@ fun AddNoteScreen(
                     }
                 },
                 enabled = viewModel.entryUiState.isEntryValid,
-                modifier = modifier
-                    .fillMaxWidth()
+                modifier = modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(R.string.create))
             }

@@ -25,13 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.korniiienko.notesapp.R
-import com.korniiienko.notesapp.ViewModelProvider
+import com.korniiienko.notesapp.di.ViewModelProvider
 import com.korniiienko.notesapp.model.AppTheme
 import com.korniiienko.notesapp.model.Note
 import com.korniiienko.notesapp.navigation.Screen

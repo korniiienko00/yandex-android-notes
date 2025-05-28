@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp
+package com.korniiienko.notesapp.di
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
@@ -36,7 +36,7 @@ object ViewModelProvider {
         initializer {
             EditNoteViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
-                remoteRepository = notesApplication().container.remoteRepository,
+                localRepository = notesApplication().container.localRepository,
             )
         }
     }

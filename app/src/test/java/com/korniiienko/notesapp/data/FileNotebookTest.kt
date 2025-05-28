@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.korniiienko.notesapp.model.Note
-import com.korniiienko.notesapp.repository.JsonLocalRepository
+import com.korniiienko.notesapp.data.repository.JsonLocalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

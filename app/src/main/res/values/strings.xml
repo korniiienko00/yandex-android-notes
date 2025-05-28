@@ -9,4 +9,8 @@
     <string name="set_content">Описание</string>
     <string name="enable_self_destruct">Добавить самоуничтожение заметки</string>
     <string name="switch_theme">Поменять тему</string>
+    <string name="delete_note">Удалить заметку</string>
+    <string name="sure_delete">Вы точно хотите удалить заметку?</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
 </resources>

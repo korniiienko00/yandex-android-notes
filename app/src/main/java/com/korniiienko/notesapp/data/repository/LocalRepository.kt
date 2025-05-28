@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp.repository
+package com.korniiienko.notesapp.data.repository
 
 import android.content.Context
 import com.korniiienko.notesapp.data.FileNotebook
@@ -11,7 +11,7 @@ interface LocalRepository {
     suspend fun addNote(note: Note)
     suspend fun updateNote(note: Note)
     suspend fun deleteNote(uid: String)
-    suspend fun getNoteByUid(uid: String): Note?
+    suspend fun getNoteByUid(uid: String): Flow<Note?>
     suspend fun save()
     suspend fun load()
 }
@@ -32,7 +32,7 @@ class RoomLocalRepository : LocalRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getNoteByUid(uid: String): Note? {
+    override suspend fun getNoteByUid(uid: String): Flow<Note?> {
         TODO("Not yet implemented")
     }
 
@@ -64,8 +64,8 @@ class JsonLocalRepository(
         fileNotebook.deleteNote(uid)
     }
 
-    override suspend fun getNoteByUid(uid: String): Note? {
-        return fileNotebook.getNoteByUid(uid).firstOrNull()
+    override suspend fun getNoteByUid(uid: String): Flow<Note> {
+        return fileNotebook.getNoteByUid(uid)
     }
 
     override suspend fun save() {

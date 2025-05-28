@@ -3,8 +3,8 @@ package com.korniiienko.notesapp.ui.screens.notes
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.notesapp.repository.LocalRepository
-import com.korniiienko.notesapp.repository.RemoteRepository
+import com.korniiienko.notesapp.data.repository.LocalRepository
+import com.korniiienko.notesapp.data.repository.RemoteRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

@@ -1,6 +1,7 @@
-package com.korniiienko.notesapp.data
+package com.korniiienko.notesapp.data.repository
 
 import android.content.Context
+import com.korniiienko.notesapp.data.ThemeRepository
 import com.korniiienko.notesapp.model.AppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

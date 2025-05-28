@@ -1,4 +1,4 @@
-package com.korniiienko.notesapp
+package com.korniiienko.notesapp.di
 
 import android.app.Application
 

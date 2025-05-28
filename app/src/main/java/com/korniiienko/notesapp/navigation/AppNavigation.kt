@@ -44,10 +44,10 @@ fun AppNavigation(
                 }
             )
         ) { backStackEntry ->
-            val noteId = backStackEntry.arguments?.getString(Screen.EditNote.argName)
+            val noteUid = backStackEntry.arguments?.getString(Screen.EditNote.argName)
                 ?: throw IllegalArgumentException("noteId parameter wasn't found")
             EditNoteScreen(
-                noteId = noteId,
+                noteUid = noteUid,
                 navigateBack = { navController.navigateUp() },
                 modifier = Modifier
             )

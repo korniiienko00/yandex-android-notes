@@ -1,12 +1,12 @@
-package com.korniiienko.notesapp
+package com.korniiienko.notesapp.di
 
 import android.content.Context
 import com.korniiienko.notesapp.data.ThemeRepository
-import com.korniiienko.notesapp.data.ThemeRepositoryImpl
-import com.korniiienko.notesapp.repository.JsonLocalRepository
-import com.korniiienko.notesapp.repository.LocalRepository
-import com.korniiienko.notesapp.repository.NetworkRemoteRepository
-import com.korniiienko.notesapp.repository.RemoteRepository
+import com.korniiienko.notesapp.data.repository.ThemeRepositoryImpl
+import com.korniiienko.notesapp.data.repository.JsonLocalRepository
+import com.korniiienko.notesapp.data.repository.LocalRepository
+import com.korniiienko.notesapp.data.repository.NetworkRemoteRepository
+import com.korniiienko.notesapp.data.repository.RemoteRepository
 
 interface AppContainer {
     val localRepository: LocalRepository
