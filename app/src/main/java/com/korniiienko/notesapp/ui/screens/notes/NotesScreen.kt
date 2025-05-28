@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -130,30 +133,22 @@ fun HabitContent(
             modifier = modifier.fillMaxWidth(),
         )
     } else {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(270.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(150.dp),
+            verticalItemSpacing = 4.dp,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = modifier.fillMaxSize(),
             contentPadding = contentPadding,
-            verticalArrangement = Arrangement.Top
         ) {
             items(items = notes, key = { it.uid }) { note ->
                 SwipeCard(
                     note = note,
-                    onActionDelete = {
-                        onSwipeDelete(note.uid)
-                    },
-                    onActionEdit = {
-                        onSwipeEdit(note.uid)
-                    },
-                    onClickNote = {
-                        onClickNote(note.uid)
-                    },
+                    onActionDelete = { onSwipeDelete(note.uid) },
+                    onActionEdit = { onSwipeEdit(note.uid) },
+                    onClickNote = { onClickNote(note.uid) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            vertical = Spacing.small,
-                            horizontal = Spacing.medium
-                        )
+                        .padding(Spacing.small)
                 )
             }
         }

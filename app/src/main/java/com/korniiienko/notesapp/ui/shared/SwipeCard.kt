@@ -3,7 +3,6 @@ package com.korniiienko.notesapp.ui.shared
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -37,10 +36,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.korniiienko.notesapp.model.Importance
 import com.korniiienko.notesapp.model.Note
-import com.korniiienko.notesapp.ui.theme.Spacing
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,12 +104,11 @@ fun SwipeCard(
             onClickDelete = onActionDelete,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(4f)
+                .wrapContentHeight()
                 .clickable(onClick = onClickNote)
         )
     }
 }
-
 
 @Composable
 private fun NoteItem(
@@ -123,64 +120,74 @@ private fun NoteItem(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color(note.color).copy(alpha = 0.9f)
         ),
         shape = MaterialTheme.shapes.medium
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Spacing.medium),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
+                .padding(16.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(Spacing.dot)
-                    .clip(RoundedCornerShape(Spacing.corners))
-                    .background(Color(note.color))
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        shape = RoundedCornerShape(Spacing.corners)
-                    )
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Spacing.small)
+            // Заголовок и кнопка удаления
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = note.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = note.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = note.importance.toString(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                IconButton(
+                    onClick = onClickDelete,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete note",
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.weight(1f, fill = true))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            IconButton(
-                onClick = onClickDelete,
-                modifier = Modifier.size(Spacing.dot)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
+            Text(
+                text = note.content,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ImportanceBadge(importance = note.importance)
         }
+    }
+}
+
+@Composable
+private fun ImportanceBadge(importance: Importance) {
+    val (containerColor, contentColor) = when (importance) {
+        Importance.LOW -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
+        Importance.BASIC -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+        Importance.IMPORTANT -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+    }
+
+    Box(
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.small)
+            .background(containerColor)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = importance.toString(),
+            style = MaterialTheme.typography.labelSmall,
+            color = contentColor
+        )
     }
 }

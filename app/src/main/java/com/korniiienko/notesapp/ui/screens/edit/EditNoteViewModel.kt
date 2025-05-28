@@ -53,7 +53,7 @@ class EditNoteViewModel(
 
     suspend fun updateItem() {
         if (validateInput()) {
-            localRepository.addNote(
+            localRepository.updateNote(
                 note = entryUiState.currentNote.toNote()
             )
         }
@@ -64,5 +64,4 @@ class EditNoteViewModel(
             uid = entryUiState.currentNote.toNote().uid
         )
     }
-
 }
