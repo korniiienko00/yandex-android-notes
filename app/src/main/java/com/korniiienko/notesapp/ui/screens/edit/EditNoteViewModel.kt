@@ -1,18 +1,12 @@
 package com.korniiienko.notesapp.ui.screens.edit
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.korniiienko.notesapp.data.repository.LocalRepository
 import com.korniiienko.notesapp.model.NoteEntity
 import com.korniiienko.notesapp.model.toNote
 import com.korniiienko.notesapp.model.toUiState
-import com.korniiienko.notesapp.data.repository.LocalRepository
-import com.korniiienko.notesapp.ui.screens.add.AddNoteIntent
-import com.korniiienko.notesapp.ui.screens.add.AddNoteState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -22,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class EditNoteViewModel(
     savedStateHandle: SavedStateHandle,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(EditNoteState())
     val state: StateFlow<EditNoteState> = _state
