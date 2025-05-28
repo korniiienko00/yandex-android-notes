@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.korniiienko.data.FileNotebook
-import com.korniiienko.data.local.JsonLocalRepository
+import com.korniiienko.data.local.json.JsonLocalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -75,7 +75,7 @@ class JsonLocalRepositoryTest {
         val loadedNote = repository.getNoteByUid(note.uid)
 
         assertNotNull(loadedNote)
-        assertEquals(note.title, loadedNote?.title)
+        assertEquals(note.title, loadedNote.first().title)
     }
 
     @Test
@@ -95,7 +95,7 @@ class JsonLocalRepositoryTest {
         testScheduler.runCurrent()
 
         val loadedNote = newRepo.getNoteByUid(note.uid)
-        assertEquals("Updated", loadedNote?.title)
+        assertEquals("Updated", loadedNote.first().title)
     }
 
     @Test

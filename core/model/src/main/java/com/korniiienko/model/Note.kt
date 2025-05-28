@@ -2,6 +2,7 @@ package com.korniiienko.model
 
 import android.graphics.Color
 import org.json.JSONObject
+import java.util.Date
 import java.util.UUID
 
 data class Note(
@@ -10,7 +11,9 @@ data class Note(
     val content: String,
     val color: Int = Color.WHITE,
     val importance: Importance = Importance.BASIC,
-    val selfDestructDate:  Long? = null
+    val expirationDate:  Long? = null,
+    val createdAt: Long? = null,
+    val updatedAt: Long? = Date().time,
 ){
     val json: JSONObject
         get() {

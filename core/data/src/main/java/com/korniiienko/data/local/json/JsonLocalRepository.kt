@@ -1,4 +1,4 @@
-package com.korniiienko.data.local
+package com.korniiienko.data.local.json
 
 import android.content.Context
 import com.korniiienko.data.FileNotebook

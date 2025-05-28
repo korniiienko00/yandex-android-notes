@@ -1,4 +1,4 @@
-package com.korniiienko.data.local
+package com.korniiienko.data.local.room
 
 import com.korniiienko.domain.LocalRepository
 import com.korniiienko.model.Note

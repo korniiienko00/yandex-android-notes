@@ -2,6 +2,7 @@ package com.korniiienko.notesapp.ui.screens.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -105,23 +107,25 @@ fun EditNoteScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Button(
-                onClick = {
-                    viewModel.processIntent(EditNoteIntent.UpdateNote)
-                    navigateBack()
-                },
-                enabled = state.isEntryValid,
-                modifier = modifier.fillMaxWidth()
-            ) {
-                Text(text = stringResource(R.string.save))
-            }
+            Row {
+                OutlinedButton(
+                    onClick = { openDialog.value = true },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onErrorContainer),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = stringResource(R.string.delete))
+                }
 
-            Button(
-                onClick = { openDialog.value = true },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onErrorContainer),
-                modifier = modifier.fillMaxWidth()
-            ) {
-                Text(text = stringResource(R.string.delete))
+                Button(
+                    onClick = {
+                        viewModel.processIntent(EditNoteIntent.UpdateNote)
+                        navigateBack()
+                    },
+                    enabled = state.isEntryValid,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = stringResource(R.string.save))
+                }
             }
         }
     }

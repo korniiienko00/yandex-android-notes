@@ -23,7 +23,7 @@ fun NoteEntity.toNote(): Note = Note(
     content = content,
     color = color,
     importance = importance,
-    selfDestructDate = selfDestructDate
+    expirationDate = selfDestructDate
 )
 
 
@@ -33,7 +33,7 @@ fun Note.toUiState(): NoteEntity = NoteEntity(
     content = content,
     color = color,
     importance = importance,
-    selfDestructDate = selfDestructDate
+    selfDestructDate = expirationDate
 )
 
 fun Long.toFormattedDate(): String {
