@@ -3,7 +3,7 @@ package com.korniiienko.notesapp.ui.screens.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.data.LocalRepository
+import com.korniiienko.domain.LocalRepository
 import com.korniiienko.notesapp.ui.screens.NoteEntity
 import com.korniiienko.notesapp.ui.screens.toNote
 import com.korniiienko.notesapp.ui.screens.toUiState

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.korniiienko.data.LocalRepository
-import com.korniiienko.data.RemoteRepository
+import com.korniiienko.domain.LocalRepository
+import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.notesapp.ui.screens.NoteEntity
 import com.korniiienko.notesapp.ui.screens.toNote
 import kotlinx.coroutines.launch
