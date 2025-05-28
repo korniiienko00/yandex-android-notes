@@ -36,6 +36,7 @@ object ViewModelProvider {
         initializer {
             EditNoteViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
+                remoteRepository = notesApplication().container.remoteRepository,
                 localRepository = notesApplication().container.localRepository,
             )
         }

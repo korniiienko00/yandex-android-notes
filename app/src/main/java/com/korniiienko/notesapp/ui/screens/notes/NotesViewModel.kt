@@ -1,5 +1,6 @@
 package com.korniiienko.notesapp.ui.screens.notes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.korniiienko.domain.LocalRepository
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class NotesViewModel(
-    remoteRepository: RemoteRepository,
+    private val remoteRepository: RemoteRepository,
     private val localRepository: LocalRepository,
 ) : ViewModel() {
 
@@ -37,9 +38,15 @@ class NotesViewModel(
         }
     }
 
-    private fun deleteNote(noteId: String) {
+    private fun deleteNote(noteUid: String) {
         viewModelScope.launch {
-            localRepository.deleteNote(noteId)
+            remoteRepository.deleteNote(uid = noteUid)
+                .onSuccess {
+                    localRepository.deleteNote(uid = noteUid)
+                }
+                .onFailure {
+                    Log.e("NotesViewModel", "error occured: ${it.localizedMessage}")
+                }
         }
     }
 

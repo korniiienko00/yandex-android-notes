@@ -1,9 +1,11 @@
 package com.korniiienko.notesapp.ui.screens.edit
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.korniiienko.domain.LocalRepository
+import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.notesapp.ui.screens.NoteEntity
 import com.korniiienko.notesapp.ui.screens.toNote
 import com.korniiienko.notesapp.ui.screens.toUiState
@@ -16,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class EditNoteViewModel(
     savedStateHandle: SavedStateHandle,
+    private val remoteRepository: RemoteRepository,
     private val localRepository: LocalRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(EditNoteState())
@@ -66,19 +69,31 @@ class EditNoteViewModel(
     private fun updateNote() {
         viewModelScope.launch {
             if (validateInput()) {
-                localRepository.updateNote(
-                    note = _state.value.currentNote.toNote()
-                )
+                val newNote = _state.value.currentNote.toNote()
+
+                remoteRepository.updateNote(note = newNote)
+                    .onSuccess {
+                        localRepository.updateNote(note = newNote )
+                    }
+                    .onFailure {
+                        Log.e("EditNoteViewModel", "error occured: ${it.localizedMessage}")
+                    }
             }
         }
     }
 
     private fun deleteNote() {
         viewModelScope.launch {
-            localRepository.deleteNote(
-                uid = _state.value.currentNote.toNote().uid
-            )
-            _state.value = _state.value.copy(isDeleted = true)
+            val noteUid = _state.value.currentNote.toNote().uid
+
+            remoteRepository.deleteNote(uid = noteUid)
+                .onSuccess {
+                    localRepository.deleteNote(uid = noteUid )
+                    _state.value = _state.value.copy(isDeleted = true)
+                }
+                .onFailure {
+                    Log.e("EditNoteViewModel", "error occured: ${it.localizedMessage}")
+                }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.korniiienko.notesapp.ui.screens.add
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -41,13 +42,16 @@ class AddNoteViewModel(
     private fun saveNote() {
         viewModelScope.launch {
             if (validateInput()) {
-                localRepository.addNote(note = entryUiState.currentNote.toNote())
-                saveToFile()
+                val newNote = entryUiState.currentNote.toNote()
+
+                remoteRepository.addNote(note = newNote)
+                    .onSuccess {
+                        localRepository.addNote(note = newNote )
+                    }
+                    .onFailure {
+                        Log.e("AddNoteViewModel", "error occured: ${it.localizedMessage}")
+                    }
             }
         }
-    }
-
-    private suspend fun saveToFile() {
-        localRepository.save()
     }
 }

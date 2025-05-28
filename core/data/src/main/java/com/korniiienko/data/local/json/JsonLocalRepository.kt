@@ -15,6 +15,7 @@ class JsonLocalRepository(
 
     override suspend fun addNote(note: Note) {
         fileNotebook.addNote(note)
+        fileNotebook.saveToFile()
     }
 
     override suspend fun updateNote(note: Note) {

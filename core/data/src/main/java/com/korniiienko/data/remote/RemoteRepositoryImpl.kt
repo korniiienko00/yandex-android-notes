@@ -3,6 +3,7 @@ package com.korniiienko.data.remote
 import com.korniiienko.model.remote.UidModel
 import com.korniiienko.data.remote.model.PatchNotesRequest
 import com.korniiienko.data.remote.model.SingleNoteRequest
+import com.korniiienko.data.remote.util.DeviceProvider
 import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.model.Note
 import com.korniiienko.model.remote.NetworkError
@@ -15,8 +16,11 @@ import javax.net.ssl.SSLHandshakeException
 
 class RemoteRepositoryImpl(
     private val api: RemoteApiService,
+    private val deviceProvider: DeviceProvider
 ) : RemoteRepository {
     private val log = LoggerFactory.getLogger("NotesRemoteRepo")
+    private val deviceId = deviceProvider.getDeviceId()
+    
     private var syncVersion: Int = 0
 
     override suspend fun getNotes(): NetworkResult<List<Note>> {
@@ -45,7 +49,7 @@ class RemoteRepositoryImpl(
         }
     }
 
-    override suspend fun addNote(note: Note, deviceId: String): NetworkResult<UidModel> {
+    override suspend fun addNote(note: Note): NetworkResult<UidModel> {
         return try {
             val currentVersion = api.getNotes().revision
             log.trace("Creating new note [${note.title}]")
@@ -63,7 +67,7 @@ class RemoteRepositoryImpl(
         }
     }
 
-    override suspend fun updateNote(note: Note, deviceId: String): NetworkResult<UidModel> {
+    override suspend fun updateNote(note: Note): NetworkResult<UidModel> {
         return try {
             val currentVersion = api.getNotes().revision
             log.trace("Updating note [${note.uid}]")
@@ -81,7 +85,7 @@ class RemoteRepositoryImpl(
             } catch (e: HttpException) {
                 if (e.code() == 404) {
                     log.info("Note not found, creating new entry")
-                    addNote(note, deviceId)
+                    addNote(note)
                 } else {
                     throw e
                 }
@@ -92,24 +96,21 @@ class RemoteRepositoryImpl(
         }
     }
 
-    override suspend fun deleteNote(noteUid: String): NetworkResult<Unit> {
+    override suspend fun deleteNote(uid: String): NetworkResult<Unit> {
         return try {
-            log.trace("Removing note [$noteUid]")
+            log.trace("Removing note [$uid]")
             val currentVersion = api.getNotes().revision
-            val response = api.deleteNote(revision = currentVersion, noteUid = noteUid)
+            val response = api.deleteNote(revision = currentVersion, noteUid = uid)
             syncVersion = response.revision
-            log.debug("Removed note [$noteUid] (v$syncVersion)")
+            log.debug("Removed note [$uid] (v$syncVersion)")
             NetworkResult.Success(Unit)
         } catch (e: Exception) {
-            log.warn("Failed to remove note [$noteUid]", e)
+            log.warn("Failed to remove note [$uid]", e)
             NetworkResult.Failure(e.toCustomError())
         }
     }
 
-    override suspend fun patchNotes(
-        notes: List<Note>,
-        deviceId: String,
-    ): NetworkResult<List<Note>> {
+    override suspend fun patchNotes(notes: List<Note>): NetworkResult<List<Note>> {
         return try {
             log.trace("Bulk updating ${notes.size} notes")
             val currentVersion = api.getNotes().revision
