@@ -10,6 +10,8 @@ import com.korniiienko.domain.LocalRepository
 import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.notesapp.ui.screens.NoteEntity
 import com.korniiienko.notesapp.ui.screens.toNote
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel(
@@ -41,7 +43,7 @@ class AddNoteViewModel(
 
     private fun saveNote() {
         if (validateInput()) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
                 val newNote = entryUiState.currentNote.toNote()
 
                 remoteRepository.addNote(note = newNote)

@@ -9,12 +9,15 @@ import com.korniiienko.domain.RemoteRepository
 import com.korniiienko.notesapp.ui.screens.NoteEntity
 import com.korniiienko.notesapp.ui.screens.toNote
 import com.korniiienko.notesapp.ui.screens.toUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 class EditNoteViewModel(
     savedStateHandle: SavedStateHandle,
@@ -67,7 +70,7 @@ class EditNoteViewModel(
     }
 
     private fun updateNote() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
             if (validateInput()) {
                 val newNote = _state.value.currentNote.toNote()
 
